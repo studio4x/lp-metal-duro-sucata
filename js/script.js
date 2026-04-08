@@ -117,4 +117,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
+    
+    /* --- CARROSSEL --- */
+    const track = document.querySelector('.carousel-track');
+    const slides = Array.from(document.querySelectorAll('.carousel-slide') || []);
+    const nextButton = document.querySelector('.carousel-button.next');
+    const prevButton = document.querySelector('.carousel-button.prev');
+    const indicatorsContainer = document.querySelector('.carousel-indicators');
+    
+    if (track && slides.length > 0) {
+        let currentSlideIndex = 0;
+        
+        // Setup indicators
+        slides.forEach((_, index) => {
+            const indicator = document.createElement('button');
+            indicator.classList.add('indicator');
+            if (index === 0) indicator.classList.add('active');
+            indicator.addEventListener('click', () => {
+                moveToSlide(index);
+            });
+            indicatorsContainer.appendChild(indicator);
+        });
+        
+        const indicators = Array.from(document.querySelectorAll('.indicator'));
+        
+        const moveToSlide = (index) => {
+            if (index < 0) {
+                index = slides.length - 1;
+            } else if (index >= slides.length) {
+                index = 0;
+            }
+            
+            track.style.transform = `translateX(-${index * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach(ind => ind.classList.remove('active'));
+            indicators[index].classList.add('active');
+            
+            currentSlideIndex = index;
+        };
+        
+        nextButton.addEventListener('click', () => {
+            moveToSlide(currentSlideIndex + 1);
+        });
+        
+        prevButton.addEventListener('click', () => {
+            moveToSlide(currentSlideIndex - 1);
+        });
+        
+        // Auto-play (a cada 5 segundos)
+        setInterval(() => {
+            moveToSlide(currentSlideIndex + 1);
+        }, 5000);
+    }
 });
