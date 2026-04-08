@@ -585,7 +585,7 @@ img {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-lg);
   aspect-ratio: 16/6;
-  background-color: var(--bg-main);
+  background-color: var(--bg-white);
 }
 
 .carousel-track {

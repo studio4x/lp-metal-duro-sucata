@@ -120,54 +120,84 @@ document.addEventListener('DOMContentLoaded', () => {
     
     /* --- CARROSSEL --- */
     const track = document.querySelector('.carousel-track');
-    const slides = Array.from(document.querySelectorAll('.carousel-slide') || []);
+    const originalSlides = Array.from(document.querySelectorAll('.carousel-slide') || []);
     const nextButton = document.querySelector('.carousel-button.next');
     const prevButton = document.querySelector('.carousel-button.prev');
     const indicatorsContainer = document.querySelector('.carousel-indicators');
     
-    if (track && slides.length > 0) {
-        let currentSlideIndex = 0;
+    if (track && originalSlides.length > 0) {
+        // Clonar primeiros e últimos itens para o loop infinito
+        // Clonamos 3 de cada para garantir que o preenchimento visual de 3 colunas funcione no pulo
+        const firstClones = originalSlides.slice(0, 3).map(s => s.cloneNode(true));
+        const lastClones = originalSlides.slice(-3).map(s => s.cloneNode(true));
         
-        // Setup indicators
-        slides.forEach((_, index) => {
+        firstClones.forEach(clone => track.appendChild(clone));
+        lastClones.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
+        
+        let currentIndex = 3; // Começa no primeiro slide original (após os 3 clones iniciais)
+        const slideCount = originalSlides.length;
+        
+        // Ajuste inicial de posição sem transição
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${currentIndex * (100 / 3)}%)`;
+        
+        // Setup indicators baseados apenas nos slides originais
+        originalSlides.forEach((_, index) => {
             const indicator = document.createElement('button');
             indicator.classList.add('indicator');
             if (index === 0) indicator.classList.add('active');
             indicator.addEventListener('click', () => {
-                moveToSlide(index);
+                moveToSlide(index + 3);
             });
             indicatorsContainer.appendChild(indicator);
         });
         
         const indicators = Array.from(document.querySelectorAll('.indicator'));
-        
-        const moveToSlide = (index) => {
-            if (index < 0) {
-                index = slides.length - 1;
-            } else if (index >= slides.length) {
-                index = 0;
-            }
+        let isTransitioning = false;
+
+        const updateIndicators = (index) => {
+            let visualIndex = (index - 3) % slideCount;
+            if (visualIndex < 0) visualIndex += slideCount;
             
-            track.style.transform = `translateX(-${index * (100 / 3)}%)`;
-            
-            // Update indicators
             indicators.forEach(ind => ind.classList.remove('active'));
-            indicators[index].classList.add('active');
-            
-            currentSlideIndex = index;
+            if (indicators[visualIndex]) indicators[visualIndex].classList.add('active');
         };
         
+        const moveToSlide = (index, withTransition = true) => {
+            if (isTransitioning && withTransition) return;
+            
+            isTransitioning = true;
+            track.style.transition = withTransition ? 'transform 0.5s ease-in-out' : 'none';
+            track.style.transform = `translateX(-${index * (100 / 3)}%)`;
+            
+            currentIndex = index;
+            updateIndicators(currentIndex);
+        };
+        
+        track.addEventListener('transitionend', () => {
+            isTransitioning = false;
+            
+            // Lógica de loop infinito: se estiver nos clones, pula para o real correspondente
+            if (currentIndex >= slideCount + 3) {
+                moveToSlide(3, false);
+            } else if (currentIndex < 3) {
+                moveToSlide(slideCount + currentIndex, false);
+            }
+        });
+        
         nextButton.addEventListener('click', () => {
-            moveToSlide(currentSlideIndex + 1);
+            moveToSlide(currentIndex + 1);
         });
         
         prevButton.addEventListener('click', () => {
-            moveToSlide(currentSlideIndex - 1);
+            moveToSlide(currentIndex - 1);
         });
         
-        // Auto-play (a cada 5 segundos)
+        // Auto-play
         setInterval(() => {
-            moveToSlide(currentSlideIndex + 1);
+            if (!isTransitioning) {
+                moveToSlide(currentIndex + 1);
+            }
         }, 5000);
     }
 });
