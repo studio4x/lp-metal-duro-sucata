@@ -579,12 +579,12 @@ img {
 .carousel-container {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   overflow: hidden;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-lg);
-  aspect-ratio: 16/9;
+  aspect-ratio: 16/6;
   background-color: var(--bg-main);
 }
 
@@ -595,8 +595,9 @@ img {
 }
 
 .carousel-slide {
-  min-width: 100%;
+  min-width: 33.333%;
   height: 100%;
+  padding: 0 5px;
 }
 
 .carousel-slide img {

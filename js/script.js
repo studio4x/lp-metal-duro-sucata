@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 index = 0;
             }
             
-            track.style.transform = `translateX(-${index * 100}%)`;
+            track.style.transform = `translateX(-${index * (100 / 3)}%)`;
             
             // Update indicators
             indicators.forEach(ind => ind.classList.remove('active'));
