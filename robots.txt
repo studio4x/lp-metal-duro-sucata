@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://metaldurosucata.com.br/sitemap.xml
