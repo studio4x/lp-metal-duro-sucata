@@ -158,10 +158,11 @@ img {
    TOP BAR (MOBILE ONLY)
 ========================================= */
 .top-bar {
-  display: none;
+  display: block;
   background-color: var(--accent-blue);
   color: var(--text-white);
   padding: 10px 0;
+  text-align: center;
   font-size: 0.9rem;
   font-weight: 600;
   position: fixed;
@@ -188,7 +189,7 @@ img {
 ========================================= */
 .header {
   position: fixed;
-  top: 0;
+  top: 41px;
   left: 0;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.95);
@@ -1105,11 +1106,10 @@ img {
     --section-padding: 60px 0;
   }
   html {
-    scroll-padding-top: 120px;
+    scroll-padding-top: 121px;
   }
   .header-cta { display: none; }
-  .top-bar { display: block; }
-  .header { top: 40px; }
+  .header { top: 41px; }
   
   .logo {
     font-size: 1.8rem; /* Increase logo size on mobile */
