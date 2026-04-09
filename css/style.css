@@ -397,7 +397,7 @@ img {
 ========================================= */
 .section-header {
   text-align: center;
-  max-width: 700px;
+  max-width: 900px;
   margin: 0 auto 60px;
 }
 
@@ -418,6 +418,16 @@ img {
 
 .light-text .section-subtitle {
   color: var(--text-light);
+}
+
+.single-line {
+  white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  .single-line {
+    white-space: normal;
+  }
 }
 
 .materials-grid {
